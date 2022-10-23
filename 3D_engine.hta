@@ -1,0 +1,181 @@
+<html>
+	<head>
+		<title>3D_engine</title>
+		<style>
+			body{
+				margin: 0px;
+			}
+		</style>
+		<meta http-equiv = "x-ua-compatible" content = "ie = 9">
+		<hta:application maximizeButton = no minimizeButton = no scroll = no border = thin>
+	</head>
+	<body oncontextmenu = "return false">
+		<script>
+			canvas = document.createElement("canvas");
+			context = canvas.getContext("2d");
+			canvas.width = 640;
+			canvas.height = 480;
+			document.body.appendChild(canvas);
+			window.resizeTo(canvas.width+(window.outerWidth-window.innerWidth), canvas.height+(window.outerHeight-window.innerHeight));
+			FPS = 30;
+			offsetX = canvas.width/2;
+			offsetY = canvas.height/2;
+			vertex = function(x, y, z){
+				this.x = x;
+				this.y = y;
+				this.z = z;
+			}
+			cube = function(x, y, z){
+				this.x = x;
+				this.y = y;
+				this.z = z;
+				this.rx = 0;
+				this.ry = 0;
+				this.rz = 0;
+				this.vertices = [
+					new vertex(this.x-100, this.y-100, this.z-100),
+					new vertex(this.x-100, this.y+100, this.z-100),
+					new vertex(this.x+100, this.y+100, this.z-100),
+					new vertex(this.x+100, this.y-100, this.z-100),
+					new vertex(this.x+100, this.y-100, this.z+100),
+					new vertex(this.x+100, this.y+100, this.z+100),
+					new vertex(this.x-100, this.y+100, this.z+100),
+					new vertex(this.x-100, this.y-100, this.z+100)
+				];
+				this.faces = [
+					[this.vertices[0], this.vertices[2], this.vertices[1]],
+					[this.vertices[0], this.vertices[3], this.vertices[2]],
+					[this.vertices[3], this.vertices[5], this.vertices[2]],
+					[this.vertices[3], this.vertices[4], this.vertices[5]],
+					[this.vertices[4], this.vertices[6], this.vertices[5]],
+					[this.vertices[4], this.vertices[7], this.vertices[6]],
+					[this.vertices[7], this.vertices[1], this.vertices[6]],
+					[this.vertices[7], this.vertices[0], this.vertices[1]],
+					[this.vertices[1], this.vertices[5], this.vertices[6]],
+					[this.vertices[1], this.vertices[2], this.vertices[5]],
+					[this.vertices[7], this.vertices[3], this.vertices[0]],
+					[this.vertices[7], this.vertices[4], this.vertices[3]]
+				];
+				this.color = [
+					"#ff0000",
+					"#0000ff",
+					"#ff00ff",
+					"#00ffff",
+					"#ffff00",
+					"#00ff00"
+				];
+				this.update = function(){
+					this.ry++;
+				}
+				this.display = function(){
+					rx = this.rx*Math.PI/180;
+					ry = this.ry*Math.PI/180;
+					rz = this.rz*Math.PI/180;
+					color = 0;
+					for(i = 0; i < 12; i++){
+						vertex1 = this.faces[i][0];
+						vertex2 = this.faces[i][1];
+						vertex3 = this.faces[i][2];
+						dx1 = vertex1.x - this.x;
+						dy1 = vertex1.y - this.y;
+						dz1 = vertex1.z - this.z;
+						d1x1 = dx1;
+						d1y1 = dy1*Math.cos(rx)-dz1*Math.sin(rx);
+						d1z1 = dz1*Math.cos(rx)+dy1*Math.sin(rx);
+						d2x1 = d1x1*Math.cos(ry)+d1z1*Math.sin(ry);
+						d2y1 = d1y1;
+						d2z1 = d1z1*Math.cos(ry)-d1x1*Math.sin(ry);
+						d3x1 = d2x1*Math.cos(rz)+d2y1*Math.sin(rz);
+						d3y1 = d2y1*Math.cos(rz)-d2x1*Math.sin(rz);
+						d3z1 = d2z1;
+						d3x1 += this.x;
+						d3y1 += this.y;
+						d3z1 += this.z;
+						dx2 = vertex2.x - this.x;
+						dy2 = vertex2.y - this.y;
+						dz2 = vertex2.z - this.z;
+						d1x2 = dx2;
+						d1y2 = dy2*Math.cos(rx)-dz2*Math.sin(rx);
+						d1z2 = dz2*Math.cos(rx)+dy2*Math.sin(rx);
+						d2x2 = d1x2*Math.cos(ry)+d1z2*Math.sin(ry);
+						d2y2 = d1y2;
+						d2z2 = d1z2*Math.cos(ry)-d1x2*Math.sin(ry);
+						d3x2 = d2x2*Math.cos(rz)+d2y2*Math.sin(rz);
+						d3y2 = d2y2*Math.cos(rz)-d2x2*Math.sin(rz);
+						d3z2 = d2z2;
+						d3x2 += this.x;
+						d3y2 += this.y;
+						d3z2 += this.z;
+						dx3 = vertex3.x - this.x;
+						dy3 = vertex3.y - this.y;
+						dz3 = vertex3.z - this.z;
+						d1x3 = dx3;
+						d1y3 = dy3*Math.cos(rx)-dz3*Math.sin(rx);
+						d1z3 = dz3*Math.cos(rx)+dy3*Math.sin(rx);
+						d2x3 = d1x3*Math.cos(ry)+d1z3*Math.sin(ry);
+						d2y3 = d1y3;
+						d2z3 = d1z3*Math.cos(ry)-d1x3*Math.sin(ry);
+						d3x3 = d2x3*Math.cos(rz)+d2y3*Math.sin(rz);
+						d3y3 = d2y3*Math.cos(rz)-d2x3*Math.sin(rz);
+						d3z3 = d2z3;
+						d3x3 += this.x;
+						d3y3 += this.y;
+						d3z3 += this.z;
+						if(d3z1 > 0 && d3z2 > 0 && d3z3 > 0){
+							vector1X = d3x1-d3x2;
+							vector1Y = d3y1-d3y2;
+							vector1Z = d3z1-d3z2;
+							vector2X = d3x3-d3x2;
+							vector2Y = d3y3-d3y2;
+							vector2Z = d3z3-d3z2;
+							crossProductX = vector1Y*vector2Z-vector1Z*vector2Y;
+							crossProductY = vector1Z*vector2X-vector1X*vector2Z;
+							crossProductZ = vector1X*vector2Y-vector1Y*vector2X;
+							cameraX = -(d3x1+d3x2+d3x3)/3;
+							cameraY = -(d3y1+d3y2+d3y3)/3;
+							cameraZ = -(d3z1+d3z2+d3z3)/3;
+							dp = crossProductX*cameraX+crossProductY*cameraY+crossProductZ*cameraZ;
+							if(dp > 0)
+							{
+								scale1 = 350/d3z1;
+								x1 = d3x1*scale1+offsetX;
+								y1 = -d3y1*scale1+offsetY;
+								scale2 = 350/d3z2;
+								x2 = d3x2*scale2+offsetX;
+								y2 = -d3y2*scale2+offsetY;
+								scale3 = 350/d3z3;
+								x3 = d3x3*scale3+offsetX;
+								y3 = -d3y3*scale3+offsetY;
+								context.fillStyle = this.color[Math.floor(color)];
+								context.beginPath();
+								context.moveTo(x1, y1);
+								context.lineTo(x2, y2);
+								context.lineTo(x3, y3);
+								context.fill();
+								context.closePath();
+							}
+						}
+						color += 0.5;
+					}
+				}
+			}
+			cube = new cube(0, 0, 400);
+			update = function(){
+				cube.update();
+			}
+			clearScreen = function(){
+				context.fillStyle = "#000000";
+				context.fillRect(0, 0, canvas.width, canvas.height);
+			}
+			display = function(){
+				clearScreen();
+				cube.display();
+			}
+			loop = function(){
+				update();
+				display();
+			}
+			setInterval(loop, 1000/FPS);
+		</script>
+	</body>
+</html>
